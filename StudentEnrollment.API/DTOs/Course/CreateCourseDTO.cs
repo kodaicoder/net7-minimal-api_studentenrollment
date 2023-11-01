@@ -16,11 +16,14 @@ namespace StudentEnrollment.API.DTOs.Course
 		{
 			RuleFor(x => x.Title)
 				.NotEmpty()
-				.MaximumLength(100);
+				.MaximumLength(100)
+				.WithMessage("Title must not great than 100 characters");
 
 			RuleFor(x => x.Credits)
 				.NotEmpty()
-				.LessThan(100);
+				.WithMessage("Credits must be between 1 and 100")
+				.LessThan(100)
+				.WithMessage("Credits must be between 1 and 100");
 		}
 	}
 }

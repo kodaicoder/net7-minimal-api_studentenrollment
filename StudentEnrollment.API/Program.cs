@@ -92,7 +92,7 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
-
+//builder.Services.AddScoped<IValidator<CreateEnrollmentDTO>, CreateEnrollmentDTOValidator>();
 
 // add Scope for Interfaces and Repositories to services of API app
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
@@ -100,6 +100,7 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 builder.Services.AddScoped<IFileUploadRepository, FileUploadRepository>();
+
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 

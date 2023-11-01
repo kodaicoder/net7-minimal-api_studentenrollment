@@ -68,6 +68,7 @@ public class CourseEndpoints : ICarterModule
 
 		//!Get Students of Course
 		group.MapGet("/Course/GetStudents/{id}", GetStudentsByCourseId)
+			.AddEndpointFilter<LoggingFilter>()
 			.WithName("GetStudentsByCourseId")
 			.WithSummary("Get Students by Course Id")
 			.WithDescription("{Course_Id}")
@@ -75,14 +76,14 @@ public class CourseEndpoints : ICarterModule
 			.Produces(StatusCodes.Status404NotFound);
 	}
 	//!>>GET
-	private static async Task<IResult> GetAllCourses(IMapper mapper, ICourseRepository repo)
+	private static async Task<IResult> GetAllCourses(ICourseRepository repo, IMapper mapper)
 	{
 		List<Course> courses = await repo.GetAllAsync();
 		//Mapping from courses from LinQ back to CourseDTO for present it to requestor
 		return Results.Ok(mapper.Map<List<CourseDTO>>(courses));
 	}
 	//!>>GET-Id
-	private static async Task<IResult> GetCourseById(IMapper mapper, ICourseRepository repo, int id)
+	private static async Task<IResult> GetCourseById(ICourseRepository repo, IMapper mapper, int id)
 	{
 		Course record = await repo.GetByIdAsync(id);
 		return record is Course
@@ -91,7 +92,7 @@ public class CourseEndpoints : ICarterModule
 	}
 	//!>>POST
 	[Authorize(Roles = "Administrator")]
-	private static async Task<IResult> CreateCourse(IMapper mapper, ICourseRepository repo, CreateCourseDTO createCourseDto)
+	private static async Task<IResult> CreateCourse(CreateCourseDTO createCourseDto, ICourseRepository repo, IMapper mapper)
 	{
 		try
 		{
@@ -106,7 +107,7 @@ public class CourseEndpoints : ICarterModule
 	}
 	//!>>PUT
 	[Authorize(Roles = "Administrator")]
-	private static async Task<IResult> UpdateCourseById(IMapper mapper, ICourseRepository repo, CourseDTO courseDto)
+	private static async Task<IResult> UpdateCourseById(CourseDTO courseDto, ICourseRepository repo, IMapper mapper)
 	{
 		Course record = await repo.GetByIdAsync(courseDto.Id);
 		if (record == null) return Results.NotFound();
@@ -137,8 +138,8 @@ public class CourseEndpoints : ICarterModule
 			return Results.BadRequest(ex.Message);
 		}
 	}
-
-	private static async Task<IResult> GetStudentsByCourseId(IMapper mapper, ICourseRepository repo, int id)
+	//!>>EXTRA
+	private static async Task<IResult> GetStudentsByCourseId(ICourseRepository repo, IMapper mapper, int id)
 	{
 		Course record = await repo.GetAllStudentsByCourseId(id);
 		return

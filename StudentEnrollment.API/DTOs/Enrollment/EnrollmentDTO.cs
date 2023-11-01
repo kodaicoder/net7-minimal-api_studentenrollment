@@ -1,4 +1,5 @@
-﻿using StudentEnrollment.API.DTOs.Course;
+﻿using FluentValidation;
+using StudentEnrollment.API.DTOs.Course;
 using StudentEnrollment.API.DTOs.Student;
 
 namespace StudentEnrollment.API.DTOs.Enrollment
@@ -10,11 +11,11 @@ namespace StudentEnrollment.API.DTOs.Enrollment
 		public virtual StudentDTO Student { get; set; }
 	}
 
-	//public class EnrollmentDTOValidator : AbstractValidator<EnrollmentDTO>
-	//{
-	//	public EnrollmentDTOValidator(ICourseRepository courseRepository, IStudentRepository studentRepository)
-	//	{
-	//		Include(new CreateEnrollmentDTOValidator(courseRepository, studentRepository));
-	//	}
-	//}
+	public class EnrollmentDTOValidator : AbstractValidator<EnrollmentDTO>
+	{
+		public EnrollmentDTOValidator(IServiceScopeFactory scopeFactory)
+		{
+			Include(new CreateEnrollmentDTOValidator(scopeFactory));
+		}
+	}
 }
